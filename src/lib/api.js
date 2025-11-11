@@ -10,15 +10,15 @@ function baseHeaders(extra = {}) {
 
 function authHeaders(extra = {}) {
   const token = localStorage.getItem('id_token')
-  if (token) {
-    return baseHeaders({ Authorization: `Bearer ${token}`, ...extra })
+  const demoUid = localStorage.getItem('demo_uid') || 'demo-user'
+  const demoEmail = localStorage.getItem('demo_email') || 'demo@example.com'
+  // Always include demo headers in dev; backend ignores token in dev mode and uses these to map user
+  const hdrs = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    'X-Demo-UID': demoUid,
+    'X-Demo-Email': demoEmail,
   }
-  // Dev fallback headers for backend when Firebase is not configured or not signed in
-  return baseHeaders({
-    'X-Demo-UID': localStorage.getItem('demo_uid') || 'demo-user',
-    'X-Demo-Email': localStorage.getItem('demo_email') || 'demo@example.com',
-    ...extra,
-  })
+  return baseHeaders({ ...hdrs, ...extra })
 }
 
 export async function getDashboard() {

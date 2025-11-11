@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NextStep – Testing Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @page { margin: 20mm; size: A4; }
+    @media print {
+      @page { margin: 20mm; size: A4; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    body { font-family: Arial, Helvetica, sans-serif; color:#111; margin: 40px; }
+    h1,h2,h3 { margin: 0.6em 0 0.3em; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 20px; border-bottom: 2px solid #eee; padding-bottom: 6px; }
+    h3 { font-size: 16px; page-break-after: avoid; break-after: avoid-page; }
+    .meta { color:#555; font-size: 12px; margin-bottom: 12px; }
+    .section { margin: 18px 0 28px; page-break-inside: avoid; break-inside: avoid-page; break-before: avoid-page; break-after: avoid-page; orphans: 3; widows: 3; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; page-break-inside: avoid; break-inside: avoid-page; break-before: avoid-page; break-after: avoid-page; table-layout: auto; }
+    th, td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+    th { background:#fafafa; text-align: left; white-space: nowrap; }
+    table tr th:first-child { width: 22%; }
+    .figure { margin: 16px 0 24px; page-break-inside: avoid; break-inside: avoid-page; break-before: avoid-page; break-after: avoid-page; text-align: center; }
+    .figure img { width: 100%; max-width: 100%; height: auto; max-height: 230mm; object-fit: contain; border: 1px solid #ddd; display: inline-block; margin: 0 auto; }
+    .caption { color:#333; font-size: 12px; margin-top: 6px; text-align: center; page-break-after: avoid; break-after: avoid-page; }
+    .small { font-size: 12px; color:#666; }
+    .pass { color: #0a7f28; font-weight: bold; }
+    .case-block { margin: 10px 0 18px; page-break-inside: avoid; break-inside: avoid-page; break-before: avoid-page; break-after: avoid-page; orphans: 3; widows: 3; }
+  </style>
+</head>
+  <body>
+  <h1>NextStep – Testing Report</h1>
+  <div class="meta">Date: <span id="today"></span></div>
+  
+
+  <div class="section">
+    <h2>4.5 Testing</h2>
+    <p>Testing is the process of evaluation of a system to detect differences between given input and expected output and also to assess the feature of the system. Testing assesses the quality of the product. It is a process that is done during the development process.</p>
+
+    <h3>4.5.1 Strategy Used</h3>
+    <p>Tests can be conducted based on two approaches –</p>
+    <ul>
+      <li>Functionality testing</li>
+      <li>Implementation testing</li>
+    </ul>
+    <p>The testing method used here is Black Box Testing. It is carried out to test functionality of the program. It is also called ‘Behavioral’ testing. The tester in this case, has a set of input values and respective desired results. On providing input, if the output matches with the desired results, the program is tested ‘ok’, and problematic otherwise.</p>
+
+    <h3>4.5.2 Test Case and Analysis</h3>
+    <div class="case-block">
+    <h3>TC001 – Registration-First Gating</h3>
+    <table>
+      <tr><th>Summary</th><td>Users shouldn’t reach student pages until they finish a quick registration (choose their class).</td></tr>
+      <tr><th>Procedure</th><td>Sign up with a brand‑new account, then try opening /dashboard and /aptitude.</td></tr>
+      <tr><th>Expected</th><td>You get redirected to /register. If you hit /aptitude directly, a clear banner asks you to complete registration first.</td></tr>
+      <tr><th>Actual</th><td class="pass">Works as expected.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC002 – Email/Password Login and Provider Guidance</h3>
+    <table>
+      <tr><th>Summary</th><td>If an email is linked to Google, we guide the user to use Google; if the password is wrong, we suggest a reset.</td></tr>
+      <tr><th>Procedure</th><td>Attempt login/registration with: (a) a Google‑linked email, (b) a valid email but wrong password, (c) a fresh email.</td></tr>
+      <tr><th>Expected</th><td>For (a) message says to continue with Google; for (b) offer password reset; for (c) registration goes through.</td></tr>
+      <tr><th>Actual</th><td class="pass">All three behaved correctly.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC003 – Dashboard Requires Aptitude for New User</h3>
+    <table>
+      <tr><th>Summary</th><td>Brand‑new users shouldn’t see old data; they should be nudged to take the aptitude test first.</td></tr>
+      <tr><th>Procedure</th><td>Register, then open the dashboard without taking any test.</td></tr>
+      <tr><th>Expected</th><td>A prominent “Start Aptitude Test” prompt appears (requires_test = true).</td></tr>
+      <tr><th>Actual</th><td class="pass">Exactly as expected.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC004 – Aptitude UI and Timer</h3>
+    <table>
+      <tr><th>Summary</th><td>Questions should load for the chosen class; the timer/progress should feel smooth; users can clear a choice.</td></tr>
+      <tr><th>Procedure</th><td>Go to /aptitude, move through a few questions, then use “Clear Selection”.</td></tr>
+      <tr><th>Expected</th><td>Questions appear reliably, the timer is visible, and answers can be changed or cleared.</td></tr>
+      <tr><th>Actual</th><td class="pass">Everything behaved smoothly.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC005 – Submit Aptitude Updates Dashboard</h3>
+    <table>
+      <tr><th>Summary</th><td>After submitting, the dashboard should immediately reflect the new scores and guidance.</td></tr>
+      <tr><th>Procedure</th><td>Finish the test, submit, then open the dashboard.</td></tr>
+      <tr><th>Expected</th><td>Score and stream guidance are visible; previous “take test” prompt is gone.</td></tr>
+      <tr><th>Actual</th><td class="pass">Refreshed instantly.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC006 – Humanities Detection via Social</h3>
+    <table>
+      <tr><th>Summary</th><td>If a student leans into social/history/english/economics, the system should recommend Humanities.</td></tr>
+      <tr><th>Procedure</th><td>Answer in a way that clearly favors humanities subjects and submit the test.</td></tr>
+      <tr><th>Expected</th><td>Guidance highlights the Humanities stream and related skills.</td></tr>
+      <tr><th>Actual</th><td class="pass">Recommendation matched the inputs.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC007 – Skill Gap Live Refresh</h3>
+    <table>
+      <tr><th>Summary</th><td>After the test is submitted, the Skill Gap view should refresh on its own.</td></tr>
+      <tr><th>Procedure</th><td>Keep Skill Gap open, submit the test elsewhere, and watch for updates.</td></tr>
+      <tr><th>Expected</th><td>The radar chart and lists update automatically (no manual reload).</td></tr>
+      <tr><th>Actual</th><td class="pass">Auto‑refresh worked.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC008 – Career Paths Card CTA Only</h3>
+    <table>
+      <tr><th>Summary</th><td>The Careers card should be clean—just a single “Explore Careers” action.</td></tr>
+      <tr><th>Procedure</th><td>Open the dashboard after completing a test.</td></tr>
+      <tr><th>Expected</th><td>No long list of career titles—only the CTA button.</td></tr>
+      <tr><th>Actual</th><td class="pass">Looks clean and focused.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC009 – Simulations End-to-End</h3>
+    <table>
+      <tr><th>Summary</th><td>Users should be able to complete a simulation end‑to‑end and see a meaningful score.</td></tr>
+      <tr><th>Procedure</th><td>Pick a scenario, answer all questions, submit, then revisit the same scenario.</td></tr>
+      <tr><th>Expected</th><td>Score appears; answers persist per scenario; a refresh event is dispatched.</td></tr>
+      <tr><th>Actual</th><td class="pass">Everything persisted and scored correctly.</td></tr>
+    </table>
+    </div>
+
+    <div class="case-block">
+    <h3>TC010 – Fresh Start After Data Reset</h3>
+    <table>
+      <tr><th>Summary</th><td>When admins clear data, a new signup should start from a clean slate.</td></tr>
+      <tr><th>Procedure</th><td>Call the reset endpoint, register a new account, then open the dashboard.</td></tr>
+      <tr><th>Expected</th><td>The new user sees the “take the test” prompt again (requires_test = true); past data is gone.</td></tr>
+      <tr><th>Actual</th><td class="pass">Clean reset confirmed.</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Figures</h2>
+    <div class="figure"><img src="images/test_fig_01_registration.png"/><div class="caption">Figure 1 – Registration/Login.</div></div>
+    <div class="figure"><img src="images/test_fig_02_redirect_register.png"/><div class="caption">Figure 2 – Registration gating on /aptitude.</div></div>
+    <div class="figure"><img src="images/test_fig_03_dashboard_requires_test.png"/><div class="caption">Figure 3 – Dashboard prompting to start test.</div></div>
+    <div class="figure"><img src="images/test_fig_05_aptitude_ui.png"/><div class="caption">Figure 4 – Aptitude UI.</div></div>
+    <div class="figure"><img src="images/test_fig_07_dashboard_after_test.png"/><div class="caption">Figure 5 – Dashboard after test.</div></div>
+    <div class="figure"><img src="images/test_fig_08_skill_gap_humanities.png"/><div class="caption">Figure 6 – Skill Gap.</div></div>
+    <div class="figure"><img src="images/test_fig_09_career_paths_cta.png"/><div class="caption">Figure 7 – Careers CTA only.</div></div>
+    <div class="figure"><img src="images/test_fig_10_simulations_score.png"/><div class="caption">Figure 8 – Simulations.</div></div>
+    <div class="figure"><img src="images/test_fig_11_app_data_updated_event.png"/><div class="caption">Figure 9 – app:data:updated banner.</div></div>
+    <div class="figure"><img src="images/test_fig_13_dashboard_fresh.png"/><div class="caption">Figure 10 – Fresh dashboard.</div></div>
+  </div>
+
+  <script>document.getElementById('today').textContent = new Date().toLocaleDateString();</script>
+</body>
+</html>

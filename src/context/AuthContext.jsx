@@ -34,11 +34,13 @@ export function AuthProvider({ children }) {
   }
 
   const signInEmail = async (email, password) => {
-    await signInWithEmailAndPassword(auth, email, password)
+    const e = String(email || '').trim().toLowerCase()
+    await signInWithEmailAndPassword(auth, e, password)
   }
 
   const registerEmail = async (email, password) => {
-    await createUserWithEmailAndPassword(auth, email, password)
+    const e = String(email || '').trim().toLowerCase()
+    await createUserWithEmailAndPassword(auth, e, password)
   }
 
   const signOut = async () => {

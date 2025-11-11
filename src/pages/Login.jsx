@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import '../styles/login.css'
+import { fetchSignInMethodsForEmail } from 'firebase/auth'
+import { auth } from '../lib/firebase'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const { signInEmail, signInGoogle } = useAuth()
+  const { signInEmail, signInGoogle, resetPassword } = useAuth()
   const navigate = useNavigate()
 
   function handleSubmit(e) {
@@ -19,13 +21,14 @@ export default function Login() {
       alert('Please provide email and password')
       return
     }
+    const eaddr = String(email).trim().toLowerCase()
     setLoading(true)
-    signInEmail(email, password)
+    signInEmail(eaddr, password)
       .then(() => {
         // Set per-user demo headers for backend dev mode
         try {
-          localStorage.setItem('demo_uid', email)
-          localStorage.setItem('demo_email', email)
+          localStorage.setItem('demo_uid', eaddr)
+          localStorage.setItem('demo_email', eaddr)
           // Clear any stale token if not using Firebase tokens
           if (!localStorage.getItem('id_token')) {
             // no-op
@@ -33,7 +36,20 @@ export default function Login() {
         } catch {}
         navigate('/dashboard')
       })
-      .catch(err => alert(err.message))
+      .catch(async err => {
+        try {
+          const methods = await fetchSignInMethodsForEmail(auth, eaddr)
+          if (methods.includes('google.com') && !methods.includes('password')) {
+            alert('This email is registered via Google. Please use Continue with Google to sign in.')
+            return
+          }
+          if (methods.includes('password')) {
+            alert('Invalid password. If you forgot it, click Forgot password to reset.')
+            return
+          }
+        } catch {}
+        alert(err.message)
+      })
       .finally(() => setLoading(false))
   }
 
@@ -114,7 +130,7 @@ export default function Login() {
                 </div>
               </Form.Group>
               <div className="text-end mb-3">
-                <a href="#" className="small">Forgot password?</a>
+                <a href="#" className="small" onClick={async (ev)=>{ ev.preventDefault(); const eaddr = String(email).trim().toLowerCase(); if(!eaddr){ alert('Enter your email to reset password'); return;} setLoading(true); try{ await resetPassword(eaddr); alert('Password reset email sent (if the account exists).'); } catch(ex){ alert(ex.message) } finally{ setLoading(false) } }}>Forgot password?</a>
               </div>
 
               <div className="d-grid mb-3">

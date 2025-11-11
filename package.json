@@ -8,9 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",
-    "@supabase/supabase-js": "^2.45.4",
     "firebase": "^10.14.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.10",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
+    "playwright": "^1.56.1",
     "vite": "^5.0.0"
   }
 }

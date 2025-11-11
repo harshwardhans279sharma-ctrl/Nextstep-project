@@ -216,7 +216,7 @@ export default function StudentDashboard() {
                   <div key={label} className={`mb-${idx === Object.keys(data.skills||{}).length-1 ? '3':'2'}`}>
                     {label.replaceAll('_',' ').replace(/\b\w/g, c=>c.toUpperCase())}
                     <span className="float-end">{gap}%</span>
-                    <ProgressBar now={gap} />
+                    <ProgressBar now={gap} variant="success" />
                   </div>
                 ))}
                 <LinkContainer to="/skill-gap">

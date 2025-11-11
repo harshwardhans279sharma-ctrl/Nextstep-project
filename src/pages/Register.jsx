@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { saveProfile } from '../lib/api'
 import { useNavigate } from 'react-router-dom'
+import { fetchSignInMethodsForEmail } from 'firebase/auth'
+import { auth } from '../lib/firebase'
 
 export default function Register() {
   const [firstName, setFirstName] = useState('')
@@ -29,8 +31,21 @@ export default function Register() {
       return
     }
 
+    const eaddr = String(email).trim().toLowerCase()
     setLoading(true)
-    registerEmail(email, password)
+    fetchSignInMethodsForEmail(auth, eaddr)
+      .then(methods => {
+        if (methods && methods.length) {
+          if (methods.includes('google.com')) {
+            throw new Error('This email is already registered via Google. Please use "Continue with Google" on the Login page.')
+          }
+          if (methods.includes('password')) {
+            throw new Error('This email is already registered. Please login with your password or use Forgot password on the Login page.')
+          }
+          throw new Error('This email is already registered via another provider.')
+        }
+        return registerEmail(eaddr, password)
+      })
       .then(async () => {
         await saveProfile({
           first_name: firstName,
@@ -38,17 +53,15 @@ export default function Register() {
           student_class: studentClass,
           parent_phone: phone,
         })
-        // Demo headers are now set automatically in AuthContext on login
+        // Ensure per-user demo headers are set immediately so the Dashboard maps to this new user
+        try {
+          localStorage.setItem('demo_uid', eaddr)
+          localStorage.setItem('demo_email', eaddr)
+        } catch {}
+        // AuthContext will also set id_token and headers on state change
         navigate('/dashboard')
       })
-      .catch(err => {
-        if (err.message && err.message.includes('email-already-in-use')) {
-          alert('This email is already registered. Redirecting you to login page...')
-          setTimeout(() => navigate('/login'), 2000)
-        } else {
-          alert(err.message)
-        }
-      })
+      .catch(err => { alert(err.message) })
       .finally(() => setLoading(false))
   }
 
@@ -113,7 +126,7 @@ export default function Register() {
                 </Form.Group>
 
                 <div className="d-grid gap-2">
-                  <Button variant="primary" type="submit" disabled={loading}>
+                  <Button variant="success" type="submit" disabled={loading}>
                     {loading ? 'Registering...' : 'Register'}
                   </Button>
                 </div>

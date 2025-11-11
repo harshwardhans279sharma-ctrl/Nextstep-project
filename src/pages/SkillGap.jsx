@@ -135,7 +135,7 @@ export default function SkillGap() {
                     <div className="fw-semibold">{g.skill}</div>
                     <div className="text-muted small">Gap {g.gap}%</div>
                   </div>
-                  <ProgressBar now={g.gap} />
+                  <ProgressBar now={g.gap} variant="success" />
                 </div>
               ))}
               <hr />
